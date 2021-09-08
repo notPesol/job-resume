@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const {Schema} = mongoose;
+const { Schema } = mongoose;
 
 const jobSchema = new Schema({
   position: {
@@ -16,7 +16,7 @@ const jobSchema = new Schema({
     required: true,
   },
   qualifications: {
-    type: String,
+    type: [String],
     required: true
   },
   datePost: {

@@ -1,1 +1,43 @@
-<% layout("/boilerplate") -%> 
+<% layout("/boilerplate") -%>
+
+  <div class="container">
+    <h2 class="text-center text-uppercase mb-3">open positions</h2>
+    <div class="container">
+      <div class="row bg-dark text-white py-2">
+        <div class="col-sm-8">
+          <b>POSITION</b>
+        </div>
+        <div class="col-sm-4 text-end">
+          2 quantities
+        </div>
+      </div>
+      <div class="row bg-secondary text-white py-2">
+        <div class="col">
+          <i>work detail</i>
+        </div>
+      </div>
+      <div class="row bg-secondary text-white">
+        <div class="col">
+          <i>qualifications</i>
+          <ul>
+            <li>dsadasdsad</li>
+            <li>dasdsadsadsd</li>
+            <li>dsadasdasdsadsadsad</li>
+          </ul>
+        </div>
+      </div>
+      <div class="row bg-dark text-white align-items-center">
+        <div class="col-sm-8">
+          <i>20/20/11</i>
+        </div>
+        <% if(isAdmin) {%>
+          <div class="col-sm-4 text-end">
+            <form action="/admin/jobIdHere?_method=DELETE" method="post">
+              <button class="btn btn-sm btn-danger p-0" type="button">remove position</button>
+            </form>
+          </div>
+        <% } %>
+      </div>
+
+    </div>
+  </div>

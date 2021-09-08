@@ -1,0 +1,29 @@
+<% layout('boilerplate') -%> 
+<%- partial('alert')  -%> 
+
+<form class="container" action="/admin/add" method="POST">
+  <h1 class="text-center text-uppercase">add a job position</h1>
+  <div class="mb-3">
+    <label for="position" class="form-label">Position</label>
+    <input name="position" type="text" class="form-control" id="position" required>
+  </div>
+  <div class="mb-3">
+    <label for="quantity" class="form-label">Quantity</label>
+    <input name="quantity" type="number" class="form-control" id="quantity" min="1" required>
+  </div>
+  <div class="mb-3">
+    <label for="detail" class="form-label">Work detail</label>
+    <textarea rows="3" name="detail" class="form-control" id="detail" required></textarea>
+  </div>
+  <div class="mb-3">
+    <label for="qualifications" class="form-label">Qualifications</label>
+    <input name="qualifications[]" type="text" class="form-control mb-2" id="qualifications" required>
+  </div>
+  <div class="mb-3">
+    <button type="button" class="btn btn-sm btn-success" id="add">Add qualification field</button>
+    <button type="button" class="btn btn-sm btn-danger" id="remove">Remove qualification field</button>
+  </div>
+  <button type="submit" class="btn btn-primary">Add</button>
+</form>
+
+<script src="/js/add.js"></script>
