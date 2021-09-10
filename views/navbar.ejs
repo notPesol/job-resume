@@ -14,14 +14,14 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
-              User
+              <%= user.firstName %> 
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">See applied job</a></li>
+              <li><a class="dropdown-item" href="/user">See applied job</a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
-              <li><a class="dropdown-item" href="#">Logout</a></li>
+              <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
             </ul>
           </li>
         <% } else if (isAdmin === true) { %>
@@ -46,17 +46,17 @@
                 User
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Login</a></li>
+                <li><a class="dropdown-item" href="/user/login">Login</a></li>
                 <li>
                   <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" href="#">Register</a></li>
+                <li><a class="dropdown-item" href="/user/register">Register</a></li>
               </ul>
             </li>
         <% } %>
       </ul>
       <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search jobs" aria-label="Search">
+        <input name="search" class="form-control me-2" type="search" placeholder="Search jobs" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
     </div>

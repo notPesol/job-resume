@@ -36,11 +36,10 @@ app.use(methodOverride("_method"));
 const { connectDatabase } = require('./utils/helper');
 connectDatabase();
 
-// middleware
-const { isAdmin } = require('./middleware');
-
 // routes
 const adminRoute = require('./routes/admin');
+const jobRoute = require('./routes/job');
+const userRoute = require('./routes/user');
 
 // use urlencoded...
 app.use(express.urlencoded({extended: true}));
@@ -54,11 +53,9 @@ app.use((req, res, next) => {
 });
 
 // use routes
+app.use('/', jobRoute);
 app.use('/admin', adminRoute);
-
-app.get('/', (req, res) => {
-  res.render('index');
-});
+app.use('/user', userRoute);
 
 
 // page not found handle

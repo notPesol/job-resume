@@ -1,43 +1,56 @@
 <% layout("/boilerplate") -%>
 
   <div class="container">
-    <h2 class="text-center text-uppercase mb-3">open positions</h2>
-    <div class="container">
-      <div class="row bg-dark text-white py-2">
-        <div class="col-sm-8">
-          <b>POSITION</b>
-        </div>
-        <div class="col-sm-4 text-end">
-          2 quantities
-        </div>
-      </div>
-      <div class="row bg-secondary text-white py-2">
-        <div class="col">
-          <i>work detail</i>
-        </div>
-      </div>
-      <div class="row bg-secondary text-white">
-        <div class="col">
-          <i>qualifications</i>
-          <ul>
-            <li>dsadasdsad</li>
-            <li>dasdsadsadsd</li>
-            <li>dsadasdasdsadsadsad</li>
-          </ul>
-        </div>
-      </div>
-      <div class="row bg-dark text-white align-items-center">
-        <div class="col-sm-8">
-          <i>20/20/11</i>
-        </div>
-        <% if(isAdmin) {%>
-          <div class="col-sm-4 text-end">
-            <form action="/admin/jobIdHere?_method=DELETE" method="post">
-              <button class="btn btn-sm btn-danger p-0" type="button">remove position</button>
-            </form>
-          </div>
-        <% } %>
-      </div>
+    <%- partial("alert") -%> 
 
-    </div>
+    <% if(jobs.length> 0) { %>
+      <h2 class="text-center text-uppercase mb-3">open positions</h2>
+      <% for(job of jobs) { %>
+        <!-- job -->
+        <div class="container mb-2">
+          <div class="row bg-dark text-white py-2">
+            <div class="col-sm-4">
+              <i><%= moment(job.datePost).fromNow() %> </i>
+            </div>
+            <div class="col-sm-4 text-center">
+              <b><%= job.position %> </b>
+            </div>
+            <div class="col-sm-4 text-end">
+              <%= job.quantity > 1 ? job.quantity + " quantities" : job.quantity + " quantity" %> 
+            </div>
+          </div>
+          <div class="row bg-secondary text-white py-2">
+            <div class="col">
+              <i><%= job.detail %> </i>
+            </div>
+          </div>
+          <div class="row bg-secondary text-white">
+            <div class="col">
+              <i>qualifications</i>
+              <ul>
+                <% for(q of job.qualifications) { %>
+                  <li><%= q %> </li>
+                <% } %>  
+              </ul>
+            </div>
+          </div>
+          <div class="row bg-secondary text-white align-items-center py-1">
+            <% if(user) { %>
+              <div class="col text-center">
+                <a class="btn btn-sm btn-success p-1" href="user/<%= job._id %>">apply job</a>
+              </div>
+            <% } %>
+            <% if(isAdmin) { %>
+              <div class="col text-center">
+                <form action="/admin/<%= job._id %>?_method=DELETE" method="post">
+                  <button class="btn btn-sm btn-danger p-1" type="submit">remove position</button>
+                </form>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      <% } %>
+    <% } else { %>
+      <h1>No job open</h1>
+    <% } %> 
   </div>

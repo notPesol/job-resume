@@ -9,10 +9,15 @@ const { isAdmin } = require('../middleware');
 // Model
 const Job = require('../models/Job');
 
+// helper
+const { flashMessage } = require('../utils/helper'); 
+
+// render admin login page
 router.get('/', (req, res) => {
   res.render('admin/index')
 });
 
+// admin login
 router.post('/', (req, res) => {
   const { username, password } = req.body;
   if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
@@ -22,16 +27,17 @@ router.post('/', (req, res) => {
   res.redirect('/');
 });
 
+// render add job page
 router.get('/add', isAdmin, (req, res) => {
   res.render('admin/add');
 });
 
+// add a new job
 router.post('/add', isAdmin, async (req, res, next) => {
   try {
     const job = new Job(req.body);
     await job.save();
-    req.flash('success', 'Add job successfully');
-    res.redirect('/admin/add');
+    flashMessage('success', 'Add job successfully', "/admin/add", req, res);
   } catch (error) {
     next(error);
   }
@@ -41,6 +47,6 @@ router.post('/add', isAdmin, async (req, res, next) => {
 router.get('/logout', (req, res) => {
   req.session.isAdmin = false;
   res.redirect('/');
-})
+});
 
 module.exports = router;

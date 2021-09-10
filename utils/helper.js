@@ -16,3 +16,9 @@ cloudinary.config({
 });
 
 module.exports.cloudinary = cloudinary;
+
+// flash
+module.exports.flashMessage = (ctx = "error", message, redirectUrl, req, res) => {
+  req.flash(ctx, message);
+  res.redirect(redirectUrl);
+};

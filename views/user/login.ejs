@@ -1,8 +1,8 @@
 <% layout('boilerplate') -%> 
-<form class="container" action="/admin" method="POST">
-  <%- partial("alert") -%> 
-
-  <h1 class="text-center text-uppercase">Admin sign in</h1>
+<form class="container" action="/user/login" method="POST">
+   
+  <h1 class="text-center text-uppercase">User sign in</h1>
+  <%- partial("alert") -%>
   <div class="mb-3">
     <label for="username" class="form-label">Username</label>
     <input name="username" type="text" class="form-control" id="username">
