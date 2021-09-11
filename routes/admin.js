@@ -11,7 +11,9 @@ const Job = require('../models/Job');
 const Application = require('../models/Application');
 
 // helper
-const { flashMessage } = require('../utils/helper'); 
+const { flashMessage, cloudinary } = require('../utils/helper');
+
+const moment = require('moment');
 
 // render admin login page
 router.get('/', (req, res) => {
@@ -44,14 +46,41 @@ router.post('/add', isAdmin, async (req, res, next) => {
   }
 });
 
-// Not finish.....................######
-router.get('/applied', isAdmin, async(req, res, next) => {
+// render applied position
+router.get('/applied', isAdmin, async (req, res, next) => {
   try {
     const applications = await Application.find()
       .populate("user", ['firstName', 'lastName'])
       .populate('job', 'position');
+    res.render('admin/applied', { applications, moment });
+  } catch (error) {
+    next(error);
+  }
+});
 
-    res.render('admin/applied', {applications});
+// delete resume and atlas doc 
+router.delete('/app/:appId', isAdmin, async (req, res, next) => {
+  try {
+    const { appId } = req.params;
+    const app = await Application.findByIdAndDelete(appId);
+
+    // delete from cloudinary
+    await cloudinary.uploader.destroy(app.resumeFile);
+
+    flashMessage("success", "Delete resume successfully.", '/admin/applied', req, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// delete a job
+router.delete('/:jobId', isAdmin, async (req, res, next) => {
+  try {
+    const { jobId } = req.params;
+    const job = await Job.findByIdAndDelete(jobId);
+    await Application.deleteMany({job: job._id});
+    
+    flashMessage("success", "Delete the job successfully.", '/', req, res);
   } catch (error) {
     next(error);
   }

@@ -3,7 +3,7 @@
   <div class="container">
     <%- partial("alert") -%> 
 
-    <% if(jobs.length> 0) { %>
+    <% if(jobs.length > 0) { %>
       <h2 class="text-center text-uppercase mb-3">open positions</h2>
       <% for(job of jobs) { %>
         <!-- job -->
@@ -37,13 +37,13 @@
           <div class="row bg-secondary text-white align-items-center py-1">
             <% if(user) { %>
               <div class="col text-center">
-                <a class="btn btn-sm btn-success p-1" href="user/<%= job._id %>">apply job</a>
+                <a class="btn btn-sm btn-success p-1" href="user/<%= job._id %>">apply</a>
               </div>
             <% } %>
             <% if(isAdmin) { %>
               <div class="col text-center">
-                <form action="/admin/<%= job._id %>?_method=DELETE" method="post">
-                  <button class="btn btn-sm btn-danger p-1" type="submit">remove position</button>
+                <form class="delete" action="/admin/<%= job._id %>?_method=DELETE" method="post">
+                  <button class="btn btn-sm btn-danger p-1" type="submit">remove</button>
                 </form>
               </div>
             <% } %>
@@ -54,3 +54,5 @@
       <h1>No job open</h1>
     <% } %> 
   </div>
+
+<% block('footer').append('<script src="/js/confirm.js"></script>') %> 

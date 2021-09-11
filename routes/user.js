@@ -126,13 +126,12 @@ router.post('/:jobId', isUser, async (req, res, next) => {
         unique_filename: true,
         use_filename: true
       });
-      console.log(fileUrl);
 
       // create a application doc
       const application = new Application({
         user: req.session.user._id,
         job: jobId,
-        resumeFile: fileUrl.url
+        resumeFile: fileUrl.public_id
       });
 
       // save to atlas
