@@ -7,12 +7,21 @@ const { isUser } = require('../middleware');
 // Model
 const Application = require('../models/Application');
 const User = require('../models/User');
+const Job = require('../models/Job');
 
 // hashing function
 const bcrypt = require('bcrypt');
 
 // helper
-const { flashMessage } = require('../utils/helper');
+const { flashMessage, cloudinary, isFileValid } = require('../utils/helper');
+
+// formidable
+const formidable = require('formidable');
+
+// module for handle path and file...
+const os = require('os');
+const fs = require('fs');
+const path = require('path');
 
 // render register
 router.get('/register', (req, res) => {
@@ -67,13 +76,69 @@ router.get('/logout', (req, res) => {
   flashMessage("success", "You are logged out", "/", req, res);
 });
 
-// not finish .....................
-router.get('/:jobId', isUser, (req, res, next) => {
+// render apply page
+router.get('/:jobId', isUser, async (req, res, next) => {
   try {
     const { jobId } = req.params;
-    const user = req.session.user;
-    console.log(user);
+    const job = await Job.findById(jobId);
+    if (!job) return flashMessage("error", "Can't find the job!", "/", req, res);
+    // if have job and user
+    res.render('user/apply', { job });
+  } catch (error) {
+    next(error);
+  }
+});
 
+// apply
+router.post('/:jobId', isUser, async (req, res, next) => {
+  try {
+    const { jobId } = req.params;
+    const form = formidable({
+      maxFileSize: 10 * 1024 * 1024,
+      maxFields: 1
+    });
+
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        if (err.message.startsWith('maxFileSize')) {
+          return flashMessage("error", "The file is too large!", `/user/${jobId}`, req, res);
+        } else {
+          throw err;
+        }
+      }
+
+      const file = files.file;
+
+      const isValid = isFileValid(file);
+      if(!isValid){
+        return flashMessage("error", "file type not allow!", `/user/${jobId}`, req, res);
+      }
+
+      // create a file name
+      const fileName = encodeURIComponent(file.name.replace(/\s/g, "-"));
+      const oldName = file.path;
+      const newName = path.join(os.tmpdir(), fileName);
+
+      fs.renameSync(oldName, newName);
+
+      const fileUrl = await cloudinary.uploader.upload(newName, {
+        folder: "resume",
+        unique_filename: true,
+        use_filename: true
+      });
+      console.log(fileUrl);
+
+      // create a application doc
+      const application = new Application({
+        user: req.session.user._id,
+        job: jobId,
+        resumeFile: fileUrl.url
+      });
+
+      // save to atlas
+      await application.save();
+      return flashMessage('success', "Your resume has been sent", "/", req, res);
+    });
   } catch (error) {
     next(error);
   }

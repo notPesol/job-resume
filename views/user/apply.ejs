@@ -1,0 +1,15 @@
+<% layout('boilerplate') -%> 
+<%- partial("alert") -%>
+
+<form class="container" action="/user/<%= job._id %>" method="POST" enctype="multipart/form-data">
+   
+  <h1 class="text-center text-uppercase"><%= job.position %></h1>
+  <div class="mb-3">
+    <label for="formFile" class="form-label">Upload resume file</label>
+    <input name="file" class="form-control" type="file" id="file" aria-describedby="fileHelp" required>
+    <div id="fileHelp" class="form-text">Allow file type jpg, jpeg, png and Max file size is 10MB</div>
+  </div>
+  <button class="btn btn-sm btn-success" type="submit">Submit</button>
+</form>
+
+<% block('footer').append('<script src="/js/validateFile.js"></script>') %> 

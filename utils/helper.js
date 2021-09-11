@@ -22,3 +22,12 @@ module.exports.flashMessage = (ctx = "error", message, redirectUrl, req, res) =>
   req.flash(ctx, message);
   res.redirect(redirectUrl);
 };
+
+module.exports.isFileValid = (file) => {
+  const type = file.type.split("/").pop();
+  const validTypes = ["jpg", "jpeg", "png"];
+  if (validTypes.indexOf(type) === -1) {
+    return false;
+  }
+  return true;
+};

@@ -8,6 +8,7 @@ const { isAdmin } = require('../middleware');
 
 // Model
 const Job = require('../models/Job');
+const Application = require('../models/Application');
 
 // helper
 const { flashMessage } = require('../utils/helper'); 
@@ -38,6 +39,19 @@ router.post('/add', isAdmin, async (req, res, next) => {
     const job = new Job(req.body);
     await job.save();
     flashMessage('success', 'Add job successfully', "/admin/add", req, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Not finish.....................######
+router.get('/applied', isAdmin, async(req, res, next) => {
+  try {
+    const applications = await Application.find()
+      .populate("user", ['firstName', 'lastName'])
+      .populate('job', 'position');
+
+    res.render('admin/applied', {applications});
   } catch (error) {
     next(error);
   }
