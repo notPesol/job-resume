@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+const { cloudinary } = require('../utils/helper');
+
 const applicationSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
@@ -19,5 +21,12 @@ const applicationSchema = new Schema({
 }, {
   timestamps: true
 });
+
+applicationSchema.post('findOneAndDelete', async (res) => {
+  if (res) {
+    // delete in cloudinary
+    await cloudinary.uploader.destroy(res.resumeFile);
+  }
+})
 
 module.exports = mongoose.model("Application", applicationSchema);
