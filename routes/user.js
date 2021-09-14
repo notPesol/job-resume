@@ -23,6 +23,19 @@ const os = require('os');
 const fs = require('fs');
 const path = require('path');
 
+// moment
+const moment = require('moment');
+
+// render all applied position/job
+router.get('/', isUser, async (req, res, next) => {
+  try {
+    const applications = await Application.find({user: req.session.user._id}).populate('job');
+    res.render('user/index', {applications, moment});
+  } catch (error) {
+    next(error);
+  }
+});
+
 // render register
 router.get('/register', (req, res) => {
   res.render('user/register');
@@ -110,7 +123,7 @@ router.post('/:jobId', isUser, async (req, res, next) => {
       const file = files.file;
 
       const isValid = isFileValid(file);
-      if(!isValid){
+      if (!isValid) {
         return flashMessage("error", "file type not allow!", `/user/${jobId}`, req, res);
       }
 

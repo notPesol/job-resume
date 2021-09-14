@@ -64,7 +64,7 @@ router.delete('/app/:appId', isAdmin, async (req, res, next) => {
     const { appId } = req.params;
     const app = await Application.findByIdAndDelete(appId);
 
-    // delete from cloudinary
+    // delete in cloudinary
     await cloudinary.uploader.destroy(app.resumeFile);
 
     flashMessage("success", "Delete resume successfully.", '/admin/applied', req, res);
@@ -77,9 +77,7 @@ router.delete('/app/:appId', isAdmin, async (req, res, next) => {
 router.delete('/:jobId', isAdmin, async (req, res, next) => {
   try {
     const { jobId } = req.params;
-    const job = await Job.findByIdAndDelete(jobId);
-    await Application.deleteMany({job: job._id});
-    
+    await Job.findByIdAndDelete(jobId);
     flashMessage("success", "Delete the job successfully.", '/', req, res);
   } catch (error) {
     next(error);

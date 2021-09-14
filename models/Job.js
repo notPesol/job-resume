@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+// Application Model
+const Application = require('./Application');
+
+// Cloudinary
+const { cloudinary } = require('../utils/helper');
+
 const jobSchema = new Schema({
   position: {
     type: String,
@@ -22,6 +28,18 @@ const jobSchema = new Schema({
   datePost: {
     type: Date,
     default: Date.now
+  }
+});
+
+jobSchema.post('findOneAndDelete', async function (res) {
+  if (res) {
+    const apps = await Application.find({ job: res._id });
+    if (apps.length > 0) {
+      for (const app of apps) {
+        await cloudinary.uploader.destroy(app.resumeFile);
+      }
+      await Application.deleteMany({ job: res._id });
+    }
   }
 });
 

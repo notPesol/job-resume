@@ -1,0 +1,42 @@
+<% layout("/boilerplate") -%>
+
+  <div class="container">
+    <% if(applications.length > 0) { %>
+      <h2 class="text-center text-uppercase mb-3">Applied positions</h2>
+      <% for(app of applications) { %>
+        <!-- app -->
+        <div class="container mb-2">
+          <div class="row bg-dark text-white py-2">
+            <div class="col-sm-4">
+              <b><%= app.job.position %> </b>
+            </div>
+            <div class="col-sm-4 text-center">
+              <i>Applied: <%= moment(app.createdAt).fromNow() %></i>
+            </div>
+            <div class="col-sm-4 text-end">
+              <i><a href="http://res.cloudinary.com/pesolcloud/image/upload/<%= app.resumeFile %>" target="_blank" rel="noopener noreferrer">Resume</a></i>
+            </div>
+          </div>
+          <div class="row bg-secondary text-white py-2">
+            <div class="col">
+              <i><%= app.job.detail %></i>
+            </div>
+          </div>
+          <div class="row bg-secondary text-white">
+            <div class="col">
+              <i>qualifications</i>
+              <ul>
+                <% for(q of app.job.qualifications) { %>
+                  <li><%= q %> </li>
+                <% } %>  
+              </ul>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    <% } else { %>
+      <h1>No applied position</h1>
+    <% } %> 
+  </div>
+
+<% block('footer').append('<script src="/js/confirm.js"></script>') %> 
